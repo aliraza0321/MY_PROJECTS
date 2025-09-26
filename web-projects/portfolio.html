@@ -1,0 +1,445 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ali Raza | Portfolio</title>
+  <style>
+    /* ===== Global Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    /* ===== Header & Navbar ===== */
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 15px 15px;
+      animation: fadeDown 1s ease-out;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ffdd57;
+      transform: translateY(-3px);
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      animation: fadeUp 1.5s ease-out;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #ffdd57;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      color: #ccc;
+    }
+
+    /* ===== Section Titles ===== */
+    h2.section-title {
+      font-size: 2rem;
+      margin: 40px 0 20px;
+      color: #ffdd57;
+      border-left: 5px solid #ffdd57;
+      padding-left: 10px;
+      animation: fadeLeft 1s ease-out;
+    }
+
+    /* ===== About Section ===== */
+    #about p {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      animation: fadeUp 1.2s ease-out;
+    }
+
+    /* ===== Skills ===== */
+    #skills ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+      animation: fadeUp 1.4s ease-out;
+    }
+
+    #skills ul li {
+      background: #333;
+      padding: 12px 20px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    #skills ul li:hover {
+      background: #ffdd57;
+      color: #1e1e2f;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(255, 221, 87, 0.5);
+    }
+
+    /* ===== Projects ===== */
+    #projects .project-card {
+      background: #2f2f44;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    #projects .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(255, 221, 87, 0.4);
+    }
+
+    #projects .btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 18px;
+      background: #2575fc;
+      color: #fff;
+      border-radius: 25px;
+      transition: 0.3s;
+    }
+
+    #projects .btn:hover {
+      background: #ffdd57;
+      color: #1e1e2f;
+    }
+
+    /* ===== Contact Form ===== */
+    #contact form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 600px;
+      margin: auto;
+      background: #2f2f44;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #contact input,
+    #contact textarea {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    #contact button {
+      padding: 12px;
+      background: #ffdd57;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #contact button:hover {
+      background: #2575fc;
+      color: #fff;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      background: #1e1e2f;
+      border-top: 1px solid #333;
+    }
+
+    footer p {
+      margin-bottom: 10px;
+      color: #aaa;
+    }
+
+    .social-icons a {
+      margin: 0 10px;
+      font-size: 1.3rem;
+      transition: 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #ffdd57;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      #skills ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #projects .project-card {
+        text-align: center;
+      }
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #ffdd57;
+      color: #1e1e2f;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: none;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .back-to-top:hover {
+      background: #2575fc;
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    /* Active Skill Highlight */
+    .active-skill {
+      background: #2575fc !important;
+      color: #fff !important;
+      transform: scale(1.2);
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Ali Raza Developer</h1>
+      <p>Creative Web Developer | Building Modern & Responsive Websites</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <h2 class="section-title">About Me</h2>
+      <p>
+        Hi, I'm Ali Raza, a passionate and creative web developer who loves turning ideas into
+        interactive and user-friendly digital experiences. With a strong foundation in HTML, CSS,
+        and JavaScript, I enjoy crafting modern, responsive websites that not only look great but
+        also deliver smooth functionality across all devices.
+      </p>
+      <p>
+        My journey into development started with curiosity about how websites work, and over time it
+        grew into a professional skill set including frameworks like React for building dynamic UIs
+        and Node.js for backend development. I also have experience in C++ programming, which has
+        sharpened my problem-solving skills and logical thinking.
+      </p>
+      <p>
+        I am always eager to learn new technologies and improve my craft, whether it's exploring
+        advanced animations in CSS, optimizing performance, or building full-stack applications.
+        My goal is to deliver clean, efficient, and impactful digital solutions that help people
+        and businesses grow online.
+      </p>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2 class="section-title">Skills</h2>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>React</li>
+        <li>Node.js</li>
+        <li>C++</li>
+      </ul>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="project-card">
+        <h3>Portfolio Website</h3>
+        <p>A responsive personal portfolio built with HTML, CSS, and JavaScript.</p>
+        <a href="#" class="btn">View Project</a>
+      </div>
+      <div class="project-card">
+        <h3>E-commerce Store</h3>
+        <p>An online shopping website built with React and Node.js backend integration.</p>
+        <a href="#" class="btn">View Project</a>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2 class="section-title">Contact Me</h2>
+      <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Ali Raza | All Rights Reserved</p>
+    <div class="social-icons">
+      <a href="#">🌐</a>
+      <a href="#">💼</a>
+      <a href="#">🐦</a>
+      <a href="#">📷</a>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // ===== Typewriter Effect for Hero Name =====
+    const heroName = document.querySelector(".hero h1");
+    const nameText = heroName.textContent;
+    heroName.textContent = "";
+    let i = 0;
+
+    function typeWriter() {
+      if (i < nameText.length) {
+        heroName.textContent += nameText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 150);
+      }
+    }
+    typeWriter();
+
+    // ===== Skills Highlight on Click =====
+    const skills = document.querySelectorAll("#skills ul li");
+    skills.forEach(skill => {
+      skill.addEventListener("click", () => {
+        skill.classList.toggle("active-skill");
+      });
+    });
+
+    // ===== Back to Top Button =====
+    const backToTop = document.createElement("button");
+    backToTop.innerText = "⬆ Back to Top";
+    backToTop.classList.add("back-to-top");
+    document.body.appendChild(backToTop);
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) {
+        backToTop.style.display = "block";
+      } else {
+        backToTop.style.display = "none";
+      }
+    });
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+
+</html>
