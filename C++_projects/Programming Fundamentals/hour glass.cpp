@@ -1,0 +1,52 @@
+// C++ program to find maximum sum of hour
+// glass in matrix
+#include<iostream>
+
+using namespace std;
+const int R = 5;
+const int C = 5;
+int findMaxSum(int mat[R][C]);
+int main()
+{
+	int mat[][C] = { {1, 2, 3, 0, 0},
+					{4, 5, 6, 0, 0},
+					{7, 8, 9, 0, 11},
+					{0, 0, 0, 1, 0},
+					{0, 0, 0, 0, 6} };
+	int res = findMaxSum(mat);
+	cout << "Maximum sum of hour glass = " << res << endl;
+	return 0;
+}
+
+// Returns maximum sum of hour glass in ar[][]
+int findMaxSum(int mat[R][C])
+{
+	if (R < 3 || C < 3) {
+		cout << "Not possible" << endl;
+		return 0;
+	}
+
+	// Here loop runs (R-2)*(C-2) times considering
+	// different top left cells of hour glasses.
+	int max_sum = INT_MIN;
+	for (int i = 0; i < R - 2; i++)
+	{
+		for (int j = 0; j < C - 2; j++)
+		{
+			// Considering mat[i][j] as top left cell of
+			// hour glass.
+			int sum = (mat[i][j] + mat[i][j + 1] + mat[i][j + 2]) +
+				(mat[i + 1][j + 1]) +
+				(mat[i + 2][j] + mat[i + 2][j + 1] + mat[i + 2][j + 2]);
+
+			// If previous sum is less than current sum then-
+			// update new sum in max_sum
+			max_sum = max(max_sum, sum);
+		}
+	}
+	return max_sum;
+}
+
+
+
+
