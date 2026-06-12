@@ -1,0 +1,621 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 12 Solution - Library Management System</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5c667a;
+      --line: #cbd3df;
+      --soft: #f4f7fb;
+      --panel: #ffffff;
+      --accent: #166c8f;
+      --accent-soft: #e7f4f8;
+      --key: #fff1d8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef2f7;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 24px auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 30px rgba(23, 32, 51, 0.08);
+    }
+
+    header {
+      padding: 34px 42px 28px;
+      border-bottom: 4px solid var(--accent);
+      background: linear-gradient(180deg, #ffffff 0%, #f7fafc 100%);
+    }
+
+    h1 {
+      margin: 12px 0 6px;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    main {
+      padding: 32px 42px 46px;
+    }
+
+    h2 {
+      margin: 36px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+      font-size: 22px;
+      color: #12243a;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 17px;
+      color: var(--accent);
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .note {
+      padding: 14px 16px;
+      margin: 18px 0;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      color: #17364a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 22px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #e9eef5;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafbfd;
+    }
+
+    .diagram-wrap {
+      overflow-x: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .diagram {
+      position: relative;
+      min-width: 1020px;
+      height: 780px;
+      background:
+        linear-gradient(#edf2f7 1px, transparent 1px),
+        linear-gradient(90deg, #edf2f7 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .entity {
+      position: absolute;
+      width: 178px;
+      background: #ffffff;
+      border: 2px solid #34445b;
+      box-shadow: 0 2px 4px rgba(23, 32, 51, 0.12);
+      font-size: 12px;
+    }
+
+    .entity .name {
+      padding: 7px 8px;
+      background: #dbe7f0;
+      border-bottom: 2px solid #34445b;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .entity ul {
+      list-style: none;
+      margin: 0;
+      padding: 6px 8px;
+    }
+
+    .entity li {
+      padding: 2px 0;
+      white-space: nowrap;
+    }
+
+    .entity .pk {
+      background: var(--key);
+      margin: -6px -8px 5px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    svg.links {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .links line,
+    .links path {
+      stroke: #34445b;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .links text {
+      fill: #233248;
+      font-size: 12px;
+      font-weight: 700;
+      paint-order: stroke;
+      stroke: #f8fafc;
+      stroke-width: 3px;
+    }
+
+    .small-list {
+      margin: 0 0 20px 20px;
+      padding: 0;
+    }
+
+    .small-list li {
+      margin: 5px 0;
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .diagram-wrap {
+        overflow: visible;
+      }
+
+      h2 {
+        break-after: avoid;
+      }
+
+      table,
+      .entity {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Lab 12: Library Management System</h1>
+      <p class="subtitle">Introduction to Data Modeling Tutorial Using ERwin | Database Systems</p>
+    </header>
+
+    <main>
+      <h2>Objective</h2>
+      <p>
+        The objective of this lab is to create a logical data model for a Library Management System using ERwin-style
+        entities, primary keys, attributes, relationships, and a data dictionary report.
+      </p>
+
+      <h2>Case Study</h2>
+      <p>
+        The Library Management System monitors and controls library transactions. It maintains records of books,
+        members, librarians, vendors, borrowing, returning, requests, searching, insertion, updating, and report
+        generation.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>End User</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Librarian</td>
+            <td>Maintains and updates records and handles the needs of library users.</td>
+          </tr>
+          <tr>
+            <td>Reader</td>
+            <td>Searches books, borrows books, returns books, and places requests.</td>
+          </tr>
+          <tr>
+            <td>Vendor</td>
+            <td>Provides books according to the requirements of the library.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>ERwin Model Settings</h2>
+      <div class="note">
+        Model Type: Logical/Physical<br>
+        Notation: Information Engineering<br>
+        Relationship Style: Mostly non-identifying relationships, with BOOK_AUTHOR as an identifying relationship.
+      </div>
+
+      <h2>Logical ER Diagram</h2>
+      <div class="diagram-wrap">
+        <div class="diagram">
+          <svg class="links" viewBox="0 0 1020 780" preserveAspectRatio="none">
+            <line x1="178" y1="92" x2="320" y2="190"></line>
+            <text x="230" y="136">1:M</text>
+            <line x1="178" y1="250" x2="320" y2="236"></line>
+            <text x="232" y="235">1:M</text>
+            <line x1="498" y1="220" x2="622" y2="92"></line>
+            <text x="548" y="144">M:N</text>
+            <line x1="498" y1="250" x2="622" y2="250"></line>
+            <text x="540" y="242">1:M</text>
+            <line x1="710" y1="148" x2="710" y2="220"></line>
+            <text x="722" y="190">M:1</text>
+            <line x1="710" y1="345" x2="710" y2="445"></line>
+            <text x="722" y="398">1:M</text>
+            <line x1="178" y1="515" x2="622" y2="515"></line>
+            <text x="384" y="506">1:M</text>
+            <line x1="498" y1="280" x2="320" y2="600"></line>
+            <text x="386" y="440">1:M</text>
+            <line x1="178" y1="545" x2="320" y2="635"></line>
+            <text x="230" y="585">1:M</text>
+            <line x1="498" y1="634" x2="622" y2="555"></line>
+            <text x="548" y="588">M:1</text>
+            <line x1="798" y1="515" x2="842" y2="515"></line>
+            <text x="812" y="506">1:M</text>
+            <line x1="930" y1="445" x2="930" y2="330"></line>
+            <text x="942" y="392">M:1</text>
+            <line x1="930" y1="565" x2="930" y2="650"></line>
+            <text x="942" y="610">1:M</text>
+            <line x1="842" y1="690" x2="498" y2="280"></line>
+            <text x="654" y="510">M:1</text>
+            <line x1="798" y1="565" x2="842" y2="690"></line>
+            <text x="804" y="632">1:M</text>
+          </svg>
+
+          <div class="entity" style="left: 22px; top: 48px;">
+            <div class="name">CATEGORY</div>
+            <ul>
+              <li class="pk">PK categoryId</li>
+              <li>categoryName</li>
+              <li>description</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 22px; top: 190px;">
+            <div class="name">PUBLISHER</div>
+            <ul>
+              <li class="pk">PK publisherId</li>
+              <li>publisherName</li>
+              <li>email</li>
+              <li>phone</li>
+              <li>address</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 320px; top: 172px;">
+            <div class="name">BOOK</div>
+            <ul>
+              <li class="pk">PK bookId</li>
+              <li>isbn</li>
+              <li>title</li>
+              <li>edition</li>
+              <li>publicationYear</li>
+              <li>FK categoryId</li>
+              <li>FK publisherId</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 622px; top: 48px;">
+            <div class="name">AUTHOR</div>
+            <ul>
+              <li class="pk">PK authorId</li>
+              <li>authorName</li>
+              <li>email</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 622px; top: 220px;">
+            <div class="name">BOOK_AUTHOR</div>
+            <ul>
+              <li class="pk">PK, FK bookId</li>
+              <li class="pk">PK, FK authorId</li>
+              <li>authorOrder</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 622px; top: 445px;">
+            <div class="name">BOOK_COPY</div>
+            <ul>
+              <li class="pk">PK copyId</li>
+              <li>FK bookId</li>
+              <li>barcode</li>
+              <li>shelfNo</li>
+              <li>copyStatus</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 22px; top: 455px;">
+            <div class="name">READER</div>
+            <ul>
+              <li class="pk">PK readerId</li>
+              <li>readerName</li>
+              <li>email</li>
+              <li>phone</li>
+              <li>address</li>
+              <li>membershipDate</li>
+              <li>status</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 320px; top: 580px;">
+            <div class="name">BOOK_REQUEST</div>
+            <ul>
+              <li class="pk">PK requestId</li>
+              <li>FK readerId</li>
+              <li>FK bookId</li>
+              <li>requestDate</li>
+              <li>requestStatus</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 842px; top: 240px;">
+            <div class="name">LIBRARIAN</div>
+            <ul>
+              <li class="pk">PK librarianId</li>
+              <li>librarianName</li>
+              <li>email</li>
+              <li>phone</li>
+              <li>shift</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 842px; top: 445px;">
+            <div class="name">BOOK_ORDER</div>
+            <ul>
+              <li class="pk">PK orderId</li>
+              <li>FK vendorId</li>
+              <li>FK librarianId</li>
+              <li>orderDate</li>
+              <li>orderStatus</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 842px; top: 650px;">
+            <div class="name">ORDER_DETAIL</div>
+            <ul>
+              <li class="pk">PK orderDetailId</li>
+              <li>FK orderId</li>
+              <li>FK bookId</li>
+              <li>quantity</li>
+              <li>unitPrice</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 842px; top: 48px;">
+            <div class="name">VENDOR</div>
+            <ul>
+              <li class="pk">PK vendorId</li>
+              <li>vendorName</li>
+              <li>email</li>
+              <li>phone</li>
+              <li>address</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 622px; top: 635px;">
+            <div class="name">BORROW_TRANSACTION</div>
+            <ul>
+              <li class="pk">PK transactionId</li>
+              <li>FK readerId</li>
+              <li>FK copyId</li>
+              <li>FK librarianId</li>
+              <li>issueDate</li>
+              <li>dueDate</li>
+              <li>returnDate</li>
+              <li>transactionStatus</li>
+            </ul>
+          </div>
+
+          <div class="entity" style="left: 320px; top: 445px;">
+            <div class="name">FINE</div>
+            <ul>
+              <li class="pk">PK fineId</li>
+              <li>FK transactionId</li>
+              <li>fineAmount</li>
+              <li>paidStatus</li>
+              <li>paidDate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2>Entities</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Primary Key</th>
+            <th>Non-Primary Key Attributes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>LIBRARIAN</td><td>librarianId</td><td>librarianName, email, phone, shift</td></tr>
+          <tr><td>READER</td><td>readerId</td><td>readerName, email, phone, address, membershipDate, status</td></tr>
+          <tr><td>VENDOR</td><td>vendorId</td><td>vendorName, email, phone, address</td></tr>
+          <tr><td>CATEGORY</td><td>categoryId</td><td>categoryName, description</td></tr>
+          <tr><td>PUBLISHER</td><td>publisherId</td><td>publisherName, email, phone, address</td></tr>
+          <tr><td>AUTHOR</td><td>authorId</td><td>authorName, email</td></tr>
+          <tr><td>BOOK</td><td>bookId</td><td>isbn, title, edition, publicationYear, categoryId, publisherId</td></tr>
+          <tr><td>BOOK_AUTHOR</td><td>bookId, authorId</td><td>authorOrder</td></tr>
+          <tr><td>BOOK_COPY</td><td>copyId</td><td>bookId, barcode, shelfNo, copyStatus</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>transactionId</td><td>readerId, copyId, librarianId, issueDate, dueDate, returnDate, transactionStatus</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>requestId</td><td>readerId, bookId, requestDate, requestStatus</td></tr>
+          <tr><td>BOOK_ORDER</td><td>orderId</td><td>vendorId, librarianId, orderDate, orderStatus</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>orderDetailId</td><td>orderId, bookId, quantity, unitPrice</td></tr>
+          <tr><td>FINE</td><td>fineId</td><td>transactionId, fineAmount, paidStatus, paidDate</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Relationships</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parent Entity</th>
+            <th>Child Entity</th>
+            <th>Relationship Type</th>
+            <th>Cardinality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CATEGORY</td><td>BOOK</td><td>Non-identifying</td><td>One category has zero or many books. One book belongs to one category.</td></tr>
+          <tr><td>PUBLISHER</td><td>BOOK</td><td>Non-identifying</td><td>One publisher publishes zero or many books. One book has one publisher.</td></tr>
+          <tr><td>BOOK</td><td>BOOK_COPY</td><td>Non-identifying</td><td>One book has one or many physical copies. One copy belongs to one book.</td></tr>
+          <tr><td>BOOK</td><td>BOOK_AUTHOR</td><td>Identifying</td><td>One book can have one or many authors.</td></tr>
+          <tr><td>AUTHOR</td><td>BOOK_AUTHOR</td><td>Identifying</td><td>One author can write one or many books.</td></tr>
+          <tr><td>READER</td><td>BORROW_TRANSACTION</td><td>Non-identifying</td><td>One reader can perform zero or many borrow transactions.</td></tr>
+          <tr><td>BOOK_COPY</td><td>BORROW_TRANSACTION</td><td>Non-identifying</td><td>One book copy can appear in zero or many borrow transactions over time.</td></tr>
+          <tr><td>LIBRARIAN</td><td>BORROW_TRANSACTION</td><td>Non-identifying</td><td>One librarian can issue zero or many books.</td></tr>
+          <tr><td>READER</td><td>BOOK_REQUEST</td><td>Non-identifying</td><td>One reader can place zero or many book requests.</td></tr>
+          <tr><td>BOOK</td><td>BOOK_REQUEST</td><td>Non-identifying</td><td>One book can be requested zero or many times.</td></tr>
+          <tr><td>VENDOR</td><td>BOOK_ORDER</td><td>Non-identifying</td><td>One vendor can receive zero or many orders.</td></tr>
+          <tr><td>LIBRARIAN</td><td>BOOK_ORDER</td><td>Non-identifying</td><td>One librarian can place zero or many orders.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>ORDER_DETAIL</td><td>Non-identifying</td><td>One order has one or many order details.</td></tr>
+          <tr><td>BOOK</td><td>ORDER_DETAIL</td><td>Non-identifying</td><td>One book can appear in zero or many order details.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>FINE</td><td>Non-identifying</td><td>One transaction can have zero or one fine.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Data Dictionary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Attribute</th>
+            <th>Key Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>LIBRARIAN</td><td>librarianId</td><td>PK</td><td>Unique identifier of a librarian.</td></tr>
+          <tr><td>LIBRARIAN</td><td>librarianName</td><td>Non-key</td><td>Name of the librarian.</td></tr>
+          <tr><td>LIBRARIAN</td><td>email</td><td>Non-key</td><td>Email address of the librarian.</td></tr>
+          <tr><td>LIBRARIAN</td><td>phone</td><td>Non-key</td><td>Contact number of the librarian.</td></tr>
+          <tr><td>LIBRARIAN</td><td>shift</td><td>Non-key</td><td>Working shift of the librarian.</td></tr>
+          <tr><td>READER</td><td>readerId</td><td>PK</td><td>Unique identifier of a reader.</td></tr>
+          <tr><td>READER</td><td>readerName</td><td>Non-key</td><td>Name of the reader.</td></tr>
+          <tr><td>READER</td><td>email</td><td>Non-key</td><td>Email address of the reader.</td></tr>
+          <tr><td>READER</td><td>phone</td><td>Non-key</td><td>Contact number of the reader.</td></tr>
+          <tr><td>READER</td><td>address</td><td>Non-key</td><td>Address of the reader.</td></tr>
+          <tr><td>READER</td><td>membershipDate</td><td>Non-key</td><td>Date when the reader became a member.</td></tr>
+          <tr><td>READER</td><td>status</td><td>Non-key</td><td>Current membership status.</td></tr>
+          <tr><td>VENDOR</td><td>vendorId</td><td>PK</td><td>Unique identifier of a vendor.</td></tr>
+          <tr><td>VENDOR</td><td>vendorName</td><td>Non-key</td><td>Name of the vendor.</td></tr>
+          <tr><td>VENDOR</td><td>email</td><td>Non-key</td><td>Email address of the vendor.</td></tr>
+          <tr><td>VENDOR</td><td>phone</td><td>Non-key</td><td>Contact number of the vendor.</td></tr>
+          <tr><td>VENDOR</td><td>address</td><td>Non-key</td><td>Address of the vendor.</td></tr>
+          <tr><td>CATEGORY</td><td>categoryId</td><td>PK</td><td>Unique identifier of a book category.</td></tr>
+          <tr><td>CATEGORY</td><td>categoryName</td><td>Non-key</td><td>Name of the category.</td></tr>
+          <tr><td>CATEGORY</td><td>description</td><td>Non-key</td><td>Description of the category.</td></tr>
+          <tr><td>PUBLISHER</td><td>publisherId</td><td>PK</td><td>Unique identifier of a publisher.</td></tr>
+          <tr><td>PUBLISHER</td><td>publisherName</td><td>Non-key</td><td>Name of the publisher.</td></tr>
+          <tr><td>PUBLISHER</td><td>email</td><td>Non-key</td><td>Email address of the publisher.</td></tr>
+          <tr><td>PUBLISHER</td><td>phone</td><td>Non-key</td><td>Contact number of the publisher.</td></tr>
+          <tr><td>PUBLISHER</td><td>address</td><td>Non-key</td><td>Address of the publisher.</td></tr>
+          <tr><td>AUTHOR</td><td>authorId</td><td>PK</td><td>Unique identifier of an author.</td></tr>
+          <tr><td>AUTHOR</td><td>authorName</td><td>Non-key</td><td>Name of the author.</td></tr>
+          <tr><td>AUTHOR</td><td>email</td><td>Non-key</td><td>Email address of the author.</td></tr>
+          <tr><td>BOOK</td><td>bookId</td><td>PK</td><td>Unique identifier of a book.</td></tr>
+          <tr><td>BOOK</td><td>isbn</td><td>Non-key</td><td>International Standard Book Number.</td></tr>
+          <tr><td>BOOK</td><td>title</td><td>Non-key</td><td>Title of the book.</td></tr>
+          <tr><td>BOOK</td><td>edition</td><td>Non-key</td><td>Edition of the book.</td></tr>
+          <tr><td>BOOK</td><td>publicationYear</td><td>Non-key</td><td>Year of publication.</td></tr>
+          <tr><td>BOOK</td><td>categoryId</td><td>FK</td><td>References CATEGORY.</td></tr>
+          <tr><td>BOOK</td><td>publisherId</td><td>FK</td><td>References PUBLISHER.</td></tr>
+          <tr><td>BOOK_AUTHOR</td><td>bookId</td><td>PK, FK</td><td>References BOOK.</td></tr>
+          <tr><td>BOOK_AUTHOR</td><td>authorId</td><td>PK, FK</td><td>References AUTHOR.</td></tr>
+          <tr><td>BOOK_AUTHOR</td><td>authorOrder</td><td>Non-key</td><td>Order of the author name on the book.</td></tr>
+          <tr><td>BOOK_COPY</td><td>copyId</td><td>PK</td><td>Unique identifier of a physical book copy.</td></tr>
+          <tr><td>BOOK_COPY</td><td>bookId</td><td>FK</td><td>References BOOK.</td></tr>
+          <tr><td>BOOK_COPY</td><td>barcode</td><td>Non-key</td><td>Unique barcode of the physical copy.</td></tr>
+          <tr><td>BOOK_COPY</td><td>shelfNo</td><td>Non-key</td><td>Shelf number of the copy.</td></tr>
+          <tr><td>BOOK_COPY</td><td>copyStatus</td><td>Non-key</td><td>Availability status of the copy.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>transactionId</td><td>PK</td><td>Unique borrowing transaction identifier.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>readerId</td><td>FK</td><td>References READER.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>copyId</td><td>FK</td><td>References BOOK_COPY.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>librarianId</td><td>FK</td><td>References LIBRARIAN.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>issueDate</td><td>Non-key</td><td>Date when the book was borrowed.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>dueDate</td><td>Non-key</td><td>Due date for return.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>returnDate</td><td>Non-key</td><td>Actual return date.</td></tr>
+          <tr><td>BORROW_TRANSACTION</td><td>transactionStatus</td><td>Non-key</td><td>Current transaction status.</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>requestId</td><td>PK</td><td>Unique request identifier.</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>readerId</td><td>FK</td><td>References READER.</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>bookId</td><td>FK</td><td>References BOOK.</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>requestDate</td><td>Non-key</td><td>Date when the request was placed.</td></tr>
+          <tr><td>BOOK_REQUEST</td><td>requestStatus</td><td>Non-key</td><td>Current request status.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>orderId</td><td>PK</td><td>Unique order identifier.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>vendorId</td><td>FK</td><td>References VENDOR.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>librarianId</td><td>FK</td><td>References LIBRARIAN.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>orderDate</td><td>Non-key</td><td>Date when the order was placed.</td></tr>
+          <tr><td>BOOK_ORDER</td><td>orderStatus</td><td>Non-key</td><td>Current order status.</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>orderDetailId</td><td>PK</td><td>Unique order detail identifier.</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>orderId</td><td>FK</td><td>References BOOK_ORDER.</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>bookId</td><td>FK</td><td>References BOOK.</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>quantity</td><td>Non-key</td><td>Quantity ordered.</td></tr>
+          <tr><td>ORDER_DETAIL</td><td>unitPrice</td><td>Non-key</td><td>Price per book copy.</td></tr>
+          <tr><td>FINE</td><td>fineId</td><td>PK</td><td>Unique fine identifier.</td></tr>
+          <tr><td>FINE</td><td>transactionId</td><td>FK</td><td>References BORROW_TRANSACTION.</td></tr>
+          <tr><td>FINE</td><td>fineAmount</td><td>Non-key</td><td>Amount charged as fine.</td></tr>
+          <tr><td>FINE</td><td>paidStatus</td><td>Non-key</td><td>Fine payment status.</td></tr>
+          <tr><td>FINE</td><td>paidDate</td><td>Non-key</td><td>Date when fine was paid.</td></tr>
+        </tbody>
+      </table>
+
+      
+    </main>
+  </div>
+</body>
+</html>
